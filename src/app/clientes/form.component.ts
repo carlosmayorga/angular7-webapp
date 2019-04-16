@@ -17,7 +17,7 @@ export class FormComponent implements OnInit {
   public errores: string[];
 
   constructor(private clienteService: ClienteService,
-              private router: Router, private activateRoute: ActivatedRoute) { }
+              private router: Router, private activateRoute: ActivatedRoute) {}
 
   ngOnInit() {
     this.cargarCliente();
@@ -25,10 +25,10 @@ export class FormComponent implements OnInit {
 
   cargarCliente(): void {
     this.activateRoute.params.subscribe(params => {
-      let id = params['id'];
+      const id = params.id;
       if (id) {
         this.clienteService.getCliente(id)
-           .subscribe( (cliente) => this.cliente = cliente);
+          .subscribe((cliente) => this.cliente = cliente);
       }
     });
   }
@@ -36,19 +36,19 @@ export class FormComponent implements OnInit {
   public create(): void {
     this.clienteService.create(this.cliente)
       .subscribe(cliente => {
-         this.router.navigate(['/clientes']),
-         swal.fire('Nuevo Cliente', `Cliente ${cliente.nombre} creado`, 'success');
-      },
-      err => {
-        this.errores = err.error.errors as string[];
-      });
+          this.router.navigate(['/clientes']),
+            swal.fire('Nuevo Cliente', `Cliente ${cliente.nombre} creado`, 'success');
+        },
+        err => {
+          this.errores = err.error.errors as string[];
+        });
   }
 
   public update(): void {
     this.clienteService.update(this.cliente)
       .subscribe(response => {
-         this.router.navigate(['/clientes']),
-         swal.fire('Cliente Actualizado', `Cliente ${response.cliente.nombre} actualizado`, 'success');
+          this.router.navigate(['/clientes']),
+            swal.fire('Cliente Actualizado', `Cliente ${response.cliente.nombre} actualizado`, 'success');
         },
         err => {
           this.errores = err.error.errors as string[];

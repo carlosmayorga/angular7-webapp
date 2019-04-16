@@ -6,6 +6,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { map, catchError, tap} from 'rxjs/operators';
 import swal from 'sweetalert2';
 import { Router, RouterEvent } from '@angular/router';
+import { log } from 'util';
 
 @Injectable({
   providedIn: 'root'
@@ -13,29 +14,31 @@ import { Router, RouterEvent } from '@angular/router';
 
 export class ClienteService {
   private url = 'http://localhost:8091/api/clientes';
-  private header = new HttpHeaders({'Content-type': 'application/json'});
+  private header = new HttpHeaders({
+    'Content-type': 'application/json'
+  });
 
-  constructor(private http: HttpClient, private router: Router) { }
+  constructor(private http: HttpClient, private router: Router) {}
 
-  getClientes(): Observable<Cliente[]> {
-    return this.http.get(this.url).pipe(
-      map(response => {
-        let clientes = response as Cliente[];
-        return clientes.map(cliente => {
+  getClientes(page: number): Observable <any> {
+    return this.http.get(this.url + '/page/' + page).pipe(
+      map((response: any) => {
+        (response.content as Cliente[]).map(cliente => {
           cliente.createAt = formatDate(cliente.createAt, 'fullDate', 'es');
           return cliente;
         });
+        return response;
       }),
       tap(response => {
-        response.forEach(cliente => {
+        response.content.forEach(cliente => {
           console.log(cliente.nombre);
         });
       })
     );
   }
 
-  getCliente(id): Observable<Cliente> {
-    return this.http.get<Cliente>(`${this.url}/${id}`).pipe(
+  getCliente(id): Observable <Cliente> {
+    return this.http.get <Cliente> (`${this.url}/${id}`).pipe(
       catchError(e => {
         this.router.navigate(['/clientes']);
         swal.fire('Error', 'Error al buscar cliente', 'error');
@@ -44,11 +47,13 @@ export class ClienteService {
     );
   }
 
-  create(cliente: Cliente): Observable<Cliente> {
-    return this.http.post(this.url, cliente, {headers: this.header}).pipe(
-      map( (response: any) => response.cliente as Cliente),
+  create(cliente: Cliente): Observable <Cliente> {
+    return this.http.post(this.url, cliente, {
+      headers: this.header
+    }).pipe(
+      map((response: any) => response.cliente as Cliente),
       catchError(e => {
-        if (e.status==400) {
+        if (e.status == 400) {
           return throwError(e);
         }
         swal.fire('Error', 'Error al crear cliente', 'error');
@@ -57,10 +62,12 @@ export class ClienteService {
     );
   }
 
-  update(cliente: Cliente): Observable<any> {
-    return this.http.put<any>(`${this.url}/${cliente.id}`, cliente, {headers: this.header}).pipe(
+  update(cliente: Cliente): Observable <any> {
+    return this.http.put <any> (`${this.url}/${cliente.id}`, cliente, {
+      headers: this.header
+    }).pipe(
       catchError(e => {
-        if (e.status==400) {
+        if (e.status == 400) {
           return throwError(e);
         }
         swal.fire('Error', 'Error al actualizar cliente', 'error');
@@ -69,8 +76,10 @@ export class ClienteService {
     );
   }
 
-  delete(id: number): Observable<Cliente> {
-    return this.http.delete<Cliente>(`${this.url}/${id}`, {headers: this.header}).pipe(
+  delete(id: number): Observable <Cliente> {
+    return this.http.delete <Cliente> (`${this.url}/${id}`, {
+      headers: this.header
+    }).pipe(
       catchError(e => {
         swal.fire('Error', 'Error al borrar cliente', 'error');
         return throwError(e);

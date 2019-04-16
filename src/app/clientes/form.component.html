@@ -1,5 +1,8 @@
-
-<!--If you want to show the errors under fields uncomment the required property-->
+<!--
+Si desea validar en el front y mostrar los errores abajo de los text-field entonces
+descomenta las propiedades "required" que estan abajo, igual forma se esta validando
+del lado del backend.
+-->
 <ul class="alert alert-danger" *ngIf="errores?.length > 0">
   <li *ngFor="let err of errores">
     {{err}}
@@ -14,13 +17,14 @@
       <div class="form-group row">
         <label for="nombre" class="col-form-label col-sm-2">Nombre</label>
         <div class="col-sm-6">
-          <input type="text" class="form-control" [(ngModel)]="cliente.nombre" name="nombre" #nombre="ngModel"> <!--required minlength="4"-->
+          <input type="text" class="form-control" [(ngModel)]="cliente.nombre" name="nombre" #nombre="ngModel">
+          <!--required minlength="4"-->
           <div class="alert alert-danger" *ngIf="nombre.invalid && (nombre.dirty || nombre.touched)">
             <div *ngIf="nombre.errors.required">
               El nombre es requerido
             </div>
             <div *ngIf="nombre.errors.minlength">
-                El nombre debe tener al menos 4 caracteres
+              El nombre debe tener al menos 4 caracteres
             </div>
           </div>
         </div>
@@ -29,39 +33,42 @@
       <div class="form-group row">
         <label for="apellido" class="col-form-label col-sm-2">Apellido</label>
         <div class="col-sm-6">
-          <input type="text" class="form-control" [(ngModel)]="cliente.apellido" name="apellido" #apellido="ngModel"> <!--required minlength="4"-->
+          <input type="text" class="form-control" [(ngModel)]="cliente.apellido" name="apellido" #apellido="ngModel">
+          <!--required minlength="4"-->
           <div class="alert alert-danger" *ngIf="apellido.invalid && (apellido.dirty || apellido.touched)">
-              <div *ngIf="apellido.errors.required">
-                El apellido es requerido
-              </div>
-              <div *ngIf="apellido.errors.minlength">
-                  El apellido debe tener al menos 4 caracteres
-              </div>
+            <div *ngIf="apellido.errors.required">
+              El apellido es requerido
             </div>
+            <div *ngIf="apellido.errors.minlength">
+              El apellido debe tener al menos 4 caracteres
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="form-group row">
+        <label for="createAt" class="col-form-label col-sm-2">Fecha</label>
+        <div class="col-sm-6">
+          <input type="date" class="form-control" [(ngModel)]="cliente.createAt" name="createAt">
         </div>
       </div>
 
       <div class="form-group row">
         <label for="email" class="col-form-label col-sm-2">Email</label>
         <div class="col-sm-6">
-          <input type="text" class="form-control" [(ngModel)]="cliente.email" name="email" #email="ngModel"> <!--required email-->
-          <div class="alert alert-danger" *ngIf="email.invalid && (email.dirty || email.touched)">
-            <div *ngIf="email.errors.required">
-              El email es requerido
-            </div>
-            <div *ngIf="email.errors.email">
-                Debe tener un formato valido
-            </div>
-          </div>
+          <input type="text" class="form-control" [(ngModel)]="cliente.email" name="email">
         </div>
       </div>
 
       <div class="form-group row">
         <div class="col-sm-6">
-          <button class="btn btn-primary" role="button" (click)='create()' *ngIf="!cliente.id else elseBlock" [disabled]="!clienteForm.form.valid">Crear</button>
+          <button class="btn btn-primary" role="button" (click)='create()' *ngIf="!cliente.id else elseBlock"
+            [disabled]="!clienteForm.form.valid">Crear</button>
 
           <ng-template #elseBlock>
-            <button class="btn btn-primary" role="button" (click)='update()' [disabled]="!clienteForm.form.valid">Editar</button>
+            <button class="btn btn-primary" role="button" (click)='update()'
+              [disabled]="!clienteForm.form.valid">Editar</button>
           </ng-template>
         </div>
       </div>
