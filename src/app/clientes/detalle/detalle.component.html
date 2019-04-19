@@ -1,0 +1,60 @@
+<div *ngIf="modalService.modal" class="abrir-modal animacion fadeIn">
+  <div class="modal" tabindex="-1" role="dialog" style="display: block;">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">{{ titulo }}</h5>
+          <button type="button" (click)="cerrarModal()" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="container">
+
+            <div class="row">
+              <div class="col-sm">
+
+                <ul *ngIf="cliente" class="list-group text-dark mb-3">
+                  <li class="list-group-item active">{{cliente.nombre}}</li>
+                  <li class="list-group-item">{{cliente.apellido}}</li>
+                  <li class="list-group-item">{{cliente.email}}</li>
+                  <li class="list-group-item">{{cliente.createAt}}</li>
+                </ul>
+
+                <div class="input-group mb-3">
+                  <div class="custom-file">
+                    <input (change)="seleccionarFoto($event)" type="file" class="custom-file-input"
+                      id="inputGroupFile04" aria-describedby="inputGroupFileAddon04">
+                    <label class="custom-file-label" for="inputGroupFile04">Seleccionar foto</label>
+                  </div>
+                  <div class="input-group-append">
+                    <button (click)="subirFoto()" class="btn btn-outline-secondary" type="button"
+                      id="inputGroupFileAddon04" [disabled]="!fotoSeleccionada">Subir</button>
+                  </div>
+                </div>
+
+                <div class="progress" *ngIf="progreso > 0">
+                  <div class="progress-bar bg-info" role="progressbar" [ngStyle]="{width: progreso+'%'}"
+                    attr.aria-valuenow="{{progreso}}" aria-valuemin="0" aria-valuemax="100">
+                    {{progreso}}
+                  </div>
+                </div>
+
+              </div>
+
+              <div class="col-sm">
+                <img *ngIf="cliente?.foto" src="http://localhost:8091/api/uploads/img/{{cliente.foto}}"
+                  alt="{{cliente.foto}}" class="img-thumbnail rounded">
+              </div>
+
+            </div>
+
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" (click)="cerrarModal()" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
