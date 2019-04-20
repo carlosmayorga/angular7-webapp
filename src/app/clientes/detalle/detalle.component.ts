@@ -23,7 +23,11 @@ export class DetalleComponent implements OnInit {
 
   ngOnInit() {}
 
-  seleccionarFoto(event: { target: { files: File[]; }; }) {
+  seleccionarFoto(event: {
+    target: {
+      files: File[];
+    };
+  }) {
     this.fotoSeleccionada = event.target.files[0];
     this.progreso = 0;
     console.log(this.fotoSeleccionada);

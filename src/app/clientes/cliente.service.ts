@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { formatDate } from '@angular/common';
 import { Cliente } from './cliente';
+import { Region } from './region';
 import { of, Observable, throwError } from 'rxjs';
 import { HttpClient, HttpHeaders, HttpEvent, HttpRequest } from '@angular/common/http';
 import { map, catchError, tap} from 'rxjs/operators';
@@ -20,7 +21,10 @@ export class ClienteService {
 
   constructor(private http: HttpClient, private router: Router) {}
 
-  getClientes(page: number): Observable < any > {
+  getRegiones(): Observable <Region[]> {
+    return this.http.get <Region[]> (this.url + '/regiones');
+  }
+  getClientes(page: number): Observable <any> {
     return this.http.get(this.url + '/page/' + page).pipe(
       map((response: any) => {
         (response.content as Cliente[]).map(cliente => {
@@ -37,8 +41,8 @@ export class ClienteService {
     );
   }
 
-  getCliente(id): Observable <Cliente> {
-    return this.http.get <Cliente> (`${this.url}/${id}`).pipe(
+  getCliente(id): Observable<Cliente> {
+    return this.http.get<Cliente>(`${this.url}/${id}`).pipe(
       catchError(e => {
         this.router.navigate(['/clientes']);
         swal.fire('Error', 'Error al buscar cliente', 'error');
@@ -47,7 +51,7 @@ export class ClienteService {
     );
   }
 
-  create(cliente: Cliente): Observable <Cliente> {
+  create(cliente: Cliente): Observable<Cliente> {
     return this.http.post(this.url, cliente, {
       headers: this.header
     }).pipe(
@@ -62,8 +66,8 @@ export class ClienteService {
     );
   }
 
-  update(cliente: Cliente): Observable <any> {
-    return this.http.put < any > (`${this.url}/${cliente.id}`, cliente, {
+  update(cliente: Cliente): Observable<any> {
+    return this.http.put<any>(`${this.url}/${cliente.id}`, cliente, {
       headers: this.header
     }).pipe(
       catchError(e => {
@@ -77,7 +81,7 @@ export class ClienteService {
   }
 
   delete(id: number): Observable <Cliente> {
-    return this.http.delete <Cliente> (`${this.url}/${id}`, {
+    return this.http.delete<Cliente>(`${this.url}/${id}`, {
       headers: this.header
     }).pipe(
       catchError(e => {
@@ -87,7 +91,7 @@ export class ClienteService {
     );
   }
 
-  subirFoto(archivo: File, id): Observable <HttpEvent<{}>> {
+  subirFoto(archivo: File, id): Observable<HttpEvent<{}>> {
     const formData = new FormData();
     formData.append('archivo', archivo);
     formData.append('id', id);

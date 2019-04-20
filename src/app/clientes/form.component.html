@@ -49,10 +49,20 @@ del lado del backend.
       <div class="form-group row">
         <label for="createAt" class="col-form-label col-sm-2">Fecha</label>
         <div class="col-sm-6">
-          <input [matDatepicker]="miDatepicker" class="form-control" id="miDatepicker" [(ngModel)]="cliente.createAt"
+          <input [matDatepicker]="miDatepicker" class="form-control formCustom" [(ngModel)]="cliente.createAt"
             name="createAt">
           <mat-datepicker-toggle [for]="miDatepicker"></mat-datepicker-toggle>
           <mat-datepicker #miDatepicker></mat-datepicker>
+        </div>
+      </div>
+
+      <div class="form-group row">
+        <label for="createAt" class="col-form-label col-sm-2">Region</label>
+        <div class="col-sm-6">
+          <select [compareWith]="compararRegion" class="form-control formCustom" [(ngModel)]="cliente.region"
+            name="region">
+            <option *ngFor="let region of regiones" [(ngValue)]="region">{{region.nombre}}</option>
+          </select>
         </div>
       </div>
 

@@ -13,7 +13,7 @@ body{
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
-#miDatepicker{
-  display: inline;
-  width: 300px;
+.formCustom{
+  display: inline !important;
+  width: 300px !important;
 }
