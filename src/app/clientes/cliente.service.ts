@@ -4,8 +4,8 @@ import { Cliente } from './cliente';
 import { Region } from './region';
 import { of, Observable, throwError } from 'rxjs';
 import { HttpClient, HttpHeaders, HttpEvent, HttpRequest } from '@angular/common/http';
-import { map, catchError, tap} from 'rxjs/operators';
-import swal from 'sweetalert2';
+import { map, catchError, tap, flatMap} from 'rxjs/operators';
+import Swal from 'sweetalert2';
 import { Router, RouterEvent } from '@angular/router';
 
 
@@ -21,8 +21,20 @@ export class ClienteService {
 
   constructor(private http: HttpClient, private router: Router) {}
 
+  private isNotAuthorized(e): boolean {
+    if (e.status==401 || e.status==403) {
+      this.router.navigate(['/login']);
+      return true;
+    }
+    return false;
+  }
+
   getRegiones(): Observable <Region[]> {
-    return this.http.get <Region[]> (this.url + '/regiones');
+    return this.http.get <Region[]> (this.url + '/regiones').pipe(
+      catchError(e => {
+        this.isNotAuthorized(e);
+        return throwError(e);
+      }));
   }
   getClientes(page: number): Observable <any> {
     return this.http.get(this.url + '/page/' + page).pipe(
@@ -45,7 +57,7 @@ export class ClienteService {
     return this.http.get<Cliente>(`${this.url}/${id}`).pipe(
       catchError(e => {
         this.router.navigate(['/clientes']);
-        swal.fire('Error', 'Error al buscar cliente', 'error');
+        Swal.fire('Error', 'Error al buscar cliente', 'error');
         return throwError(e);
       })
     );
@@ -57,10 +69,13 @@ export class ClienteService {
     }).pipe(
       map((response: any) => response.cliente as Cliente),
       catchError(e => {
+        if (this.isNotAuthorized(e)) {
+          return throwError(e);
+        }
         if (e.status == 400) {
           return throwError(e);
         }
-        swal.fire('Error', 'Error al crear cliente', 'error');
+        Swal.fire('Error', 'Error al crear cliente', 'error');
         return throwError(e);
       })
     );
@@ -71,10 +86,13 @@ export class ClienteService {
       headers: this.header
     }).pipe(
       catchError(e => {
+        if (this.isNotAuthorized(e)) {
+          return throwError(e);
+        }
         if (e.status == 400) {
           return throwError(e);
         }
-        swal.fire('Error', 'Error al actualizar cliente', 'error');
+        Swal.fire('Error', 'Error al actualizar cliente', 'error');
         return throwError(e);
       })
     );
@@ -85,7 +103,10 @@ export class ClienteService {
       headers: this.header
     }).pipe(
       catchError(e => {
-        swal.fire('Error', 'Error al borrar cliente', 'error');
+        if (this.isNotAuthorized(e)) {
+          return throwError(e);
+        }
+        Swal.fire('Error', 'Error al borrar cliente', 'error');
         return throwError(e);
       })
     );
@@ -100,7 +121,11 @@ export class ClienteService {
       reportProgress: true
     });
 
-    return this.http.request(req);
+    return this.http.request(req).pipe(
+      catchError(e => {
+        this.isNotAuthorized(e);
+        return throwError(e);
+      }));
   }
 
 }

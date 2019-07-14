@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { AuthService } from '../usuarios/auth.service';
 
 @Component({
   selector: 'app-header',
@@ -6,7 +7,9 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HeaderComponent implements OnInit {
 
-  constructor() { }
+  title = 'Angular7App';
+
+  constructor(public authService: AuthService) { }
 
   ngOnInit() {
   }

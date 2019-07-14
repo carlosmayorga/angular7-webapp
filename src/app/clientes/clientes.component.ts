@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Cliente } from './cliente';
 import { ClienteService } from './cliente.service';
 import { ModalService } from './detalle/modal.service';
-import swal from 'sweetalert2';
+import Swal from 'sweetalert2';
 import { ActivatedRoute } from '@angular/router';
 
 @Component({
@@ -45,7 +45,7 @@ ngOnInit() {
 }
 
 delete(cliente: Cliente): void {
-  const swalWithBootstrapButtons = swal.mixin({
+  const swalWithBootstrapButtons = Swal.mixin({
     customClass: {
       confirmButton: 'btn btn-success',
       cancelButton: 'btn btn-danger'

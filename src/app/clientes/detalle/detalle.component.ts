@@ -3,8 +3,9 @@ import { Cliente } from '../cliente';
 import { ClienteService } from '../cliente.service';
 import { ModalService } from './modal.service';
 import { Router } from '@angular/router';
-import swal from 'sweetalert2';
+import Swal from 'sweetalert2';
 import { HttpEventType } from '@angular/common/http';
+
 @Component({
   // tslint:disable-next-line:component-selector
   selector: 'detalle-cliente',
@@ -32,13 +33,13 @@ export class DetalleComponent implements OnInit {
     this.progreso = 0;
     console.log(this.fotoSeleccionada);
     if (this.fotoSeleccionada.type.indexOf('image') < 0) {
-      swal.fire('Error', 'Solo se admiten archivos de tipo img', 'error');
+      Swal.fire('Error', 'Solo se admiten archivos de tipo img', 'error');
     }
   }
 
   subirFoto() {
     if (!this.fotoSeleccionada) {
-      swal.fire('Error', 'Debe seleccionar una foto', 'error');
+      Swal.fire('Error', 'Debe seleccionar una foto', 'error');
     } else {
       this.clienteService.subirFoto(this.fotoSeleccionada, this.cliente.id)
         .subscribe(event => {
@@ -48,7 +49,7 @@ export class DetalleComponent implements OnInit {
             let response: any = event.body;
             this.cliente = response.cliente as Cliente;
             this.modalService.notificarUpload.emit(this.cliente);
-            swal.fire('Perfil', 'La foto se ha subido con exito', 'success');
+            Swal.fire('Perfil', 'La foto se ha subido con exito', 'success');
           }
         });
     }
