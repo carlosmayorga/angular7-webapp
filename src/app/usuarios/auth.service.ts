@@ -42,6 +42,13 @@ export class AuthService {
     return false;
   }
 
+  hasRole(role: string): boolean {
+    if (this.usuario.roles.includes(role)) {
+      return true;
+    }
+    return false;
+  }
+
   logout(): void {
     Swal.fire({
       position: 'top-end',
@@ -50,6 +57,8 @@ export class AuthService {
       showConfirmButton: false,
       timer: 1500
     });
+    this._token = null;
+    this._usuario = null;
     sessionStorage.clear();
   }
 
@@ -65,10 +74,6 @@ export class AuthService {
     params.set('grant_type', 'password');
     params.set('username', usuario.username);
     params.set('password', usuario.password);
-
-    console.log(httpHeaders);
-    console.log(params.toString());
-    console.log(credenciales);
 
     return this.http.post < any > (urlEndPoint, params.toString(), {
       headers: httpHeaders

@@ -39,9 +39,12 @@ export class LoginComponent implements OnInit {
     }
 
     this.authService.login(this.usuario).subscribe(response => {
+
+        console.log(JSON.parse(atob(response.access_token.split('.')[1])));
+
         this.authService.guardarUsuario(response.access_token);
         this.authService.guardarToken(response.access_token);
-        const usuario = this.authService.usuario;
+        let usuario = this.authService.usuario;
 
         this.router.navigate(['/clientes']);
         Swal.fire({
